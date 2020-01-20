@@ -1,14 +1,26 @@
 package com.buckets.bankingapp.models;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+
 
 @Entity
-public class User {
+@Table(name = "user")
+public class User implements Serializable{
 	
 	@Id
-	private Integer user_id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long user_id;
 	
 	@Column(name="username")
 	private String username;
@@ -16,15 +28,30 @@ public class User {
 	@Column(name="password")
 	private String password;
 	
+	@OneToMany(mappedBy = "todo", cascade = CascadeType.ALL)
+	private List<Todo> todos;
+	
 	public User() {
 		super();
 	}
+	
+	
 
-	public int getUser_id() {
+	public User(Long user_id, String username, String password, List<Todo> todos) {
+		super();
+		this.user_id = user_id;
+		this.username = username;
+		this.password = password;
+		this.todos = todos;
+	}
+
+
+
+	public Long getUser_id() {
 		return user_id;
 	}
 
-	public void setUser_id(int user_id) {
+	public void setUser_id(Long user_id) {
 		this.user_id = user_id;
 	}
 

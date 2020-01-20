@@ -1,81 +1,92 @@
 package com.buckets.bankingapp.services;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.buckets.bankingapp.model.Todo;
-public class TodoService {
+import com.buckets.bankingapp.exceptions.ResourceNotFoundException;
+import com.buckets.bankingapp.models.Todo;
+import com.buckets.bankingapp.models.User;
+import com.buckets.bankingapp.repositories.TodoRepository;
+
 	
-	@Primary
+	
+	
+	@Service
 	public class TodoService {
 		
-		// in memory database
-		private static List<Todo> todos = new ArrayList<Todo>();
-		private static int todoId = 4;
+		@Autowired
+		TodoRepository todoRepository;
 		
-		
-		static {
-			todos.add(new Todo(1, "", "", new Date(), false));
-			todos.add(new Todo(2, "", "", new Date(), false));
-			todos.add(new Todo(3, "", "", new Date(), false));
-		}
-		
+		@Autowired
+		UserService userService;
+		 
 		// returns all todos 
 		public List<Todo> listAllTodos(){
-			return todos;
+			return todoRepository.findAll();
 		}
 		
 		// return user specific todos 
-		public List<Todo> listTodos(String user){
-			
-			List<Todo> userTodos = new ArrayList<Todo>();
-			
-			for(Todo todo: todos)
-				if(todo.getUser().equalsIgnoreCase(user)) 
-					userTodos.add(todo);
-			return userTodos;
-		}
+//		public List<Todo> listTodos(Long id){
+//			
+//			List<Todo> userTodos = new ArrayList<Todo>();
+//			
+//			for(Todo todo: todos)
+//				if(todo.getUser().equalsIgnoreCase(user)) 
+//					userTodos.add(todo);
+//			return userTodos;
+//		}
 		
 		// return todo by id
-		public Todo getTodo(int todoId) {
-			Optional<Todo> tempTodo = todos.stream()
-					.filter(todo->todo.getId() == todoId)
-					.findFirst();
-			return tempTodo.get();
-		}
+//		public Todo getTodo(Long todoId) {
+//			Optional<Todo> tempTodo = todos.stream()
+//					.filter(todo->todo.getId() == todoId)
+//					.findFirst();
+//			return tempTodo.get();
+//		}
 		
 		// add a todo to list
-		public Todo addTodo(String user, String desc, Date targetDate, boolean status){
-			Todo todo = new Todo(todoId++, desc, user, targetDate, status);
-			todos.add(todo);
-			return todo;
+		public Todo addTodo(Todo todo, Long userId){
+			User user = userService.getUser(userId);
+			todo.setUser(user);
+			return todoRepository.save(todo);
+			
 		}
 
 		// update a todo in the list
-		public Todo editTodo(Todo todo){
-			deleteTodo(todo.getId());
-			todos.add(todo);
-			return todo;
+		public Todo editTodo(Long todoId, Todo todoDetails){
+			
+			Todo todo = todoRepository.findById(todoId)
+	    			.orElseThrow( ()-> new ResourceNotFoundException("todo", "id", todoId));
+	    	
+	    	// update everything except ID.
+	    	todo.setDueDate(todoDetails.getDueDate());
+	    	todo.setPriority(todoDetails.getPriority());
+	    	todo.setStatus(todoDetails.getStatus());
+	    	todo.setTodo(todoDetails.getTodo());
+	    	
+	    	Todo updatedTodo = todoRepository.save(todo);
+	    	
+	    	return updatedTodo;
 		}
 		
 		// delete a todo
-		public Todo deleteTodo(int todoId){
-			Optional<Todo> tempTodo = todos.stream()
-					.filter(todo->todo.getId() == todoId)
-					.findFirst();
+		public Todo deleteTodo(Long todoId){
 			
-			if(tempTodo.isPresent()) 
-				todos.remove(tempTodo.get());
+			Todo todo = todoRepository.findById(todoId)
+	    			.orElseThrow( ()-> new ResourceNotFoundException("Todo", "id", todoId));
+	    	
 			
-			return tempTodo.get();
+			Todo deletedTodo = todo;
+			
+			todoRepository.delete(todo);
+	
+	    	
+	    	return deletedTodo;
 		}
 		
 	}
 
 
-}
+

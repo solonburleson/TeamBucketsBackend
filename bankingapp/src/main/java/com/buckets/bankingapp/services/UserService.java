@@ -13,7 +13,7 @@ public class UserService implements UserRespository
 	//return all users
 	public List<User> lisAllUsers()
 	{
-		return null;
+		return repo.findAll();
 	}
 	
 	//user specific
@@ -45,7 +45,7 @@ public class UserService implements UserRespository
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return new User();
 	}
 	
 	//add user to list

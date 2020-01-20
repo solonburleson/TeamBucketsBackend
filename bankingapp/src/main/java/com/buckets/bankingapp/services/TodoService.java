@@ -1,5 +1,6 @@
 package com.buckets.bankingapp.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +28,12 @@ import com.buckets.bankingapp.repositories.TodoRepository;
 			return todoRepository.findAll();
 		}
 		
+		
 		// return user specific todos 
-//		public List<Todo> listTodos(Long id){
-//			
-//			List<Todo> userTodos = new ArrayList<Todo>();
-//			
-//			for(Todo todo: todos)
-//				if(todo.getUser().equalsIgnoreCase(user)) 
-//					userTodos.add(todo);
-//			return userTodos;
-//		}
+		public List<Todo> listTodosById(Long userId){
+		
+			return todoRepository.findByUserId(userId);
+		}
 		
 		// return todo by id
 //		public Todo getTodo(Long todoId) {

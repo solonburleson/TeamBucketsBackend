@@ -1,11 +1,14 @@
 package com.buckets.bankingapp.models;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,13 +17,20 @@ import javax.persistence.Table;
 
 
 
+
+
 @Entity
 @Table(name = "user")
 public class User implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5174046345078611300L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long user_id;
+	private Long id;
 	
 	@Column(name="username")
 	private String username;
@@ -28,31 +38,32 @@ public class User implements Serializable{
 	@Column(name="password")
 	private String password;
 	
-	@OneToMany(mappedBy = "todo", cascade = CascadeType.ALL)
-	private List<Todo> todos;
+	@OneToMany(mappedBy = "id", targetEntity = Todo.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set <Todo> todoSet = new HashSet<Todo>();
 	
 	public User() {
 		super();
 	}
-	
-	
 
-	public User(Long user_id, String username, String password, List<Todo> todos) {
-		super();
-		this.user_id = user_id;
-		this.username = username;
-		this.password = password;
-		this.todos = todos;
+	public Set<Todo> getTodos(){
+		return todoSet;
 	}
 
+	public User(Long id, String username, String password, Set<Todo> todoSet) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.todoSet = todoSet;
+	}
 
 
 	public Long getUser_id() {
-		return user_id;
+		return id;
 	}
 
 	public void setUser_id(Long user_id) {
-		this.user_id = user_id;
+		this.id = user_id;
 	}
 
 	public String getUsername() {
@@ -73,7 +84,9 @@ public class User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "User [user_id=" + user_id + ", username=" + username + ", password=" + password + "]";
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", todoSet=" + todoSet + "]";
 	}
+
+	
 
 }

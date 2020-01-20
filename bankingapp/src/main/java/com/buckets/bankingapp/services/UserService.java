@@ -1,6 +1,6 @@
 package com.buckets.bankingapp.services;
 
-import java.sql.SQLException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import com.buckets.bankingapp.models.Todo;
 import com.buckets.bankingapp.models.User;
 import com.buckets.bankingapp.repositories.UserRepository;
 
@@ -23,6 +22,7 @@ public class UserService{
 	public List<User> lisAllUsers()
 	{
 		return userRepo.findAll();
+		
 	}
 	
 	

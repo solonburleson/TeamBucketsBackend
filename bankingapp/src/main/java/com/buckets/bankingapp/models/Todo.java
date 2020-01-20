@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,12 +30,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @EntityListeners(AuditingEntityListener.class)
 public class Todo implements Serializable{
 
-	
+
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1;
-	
+	private static final long serialVersionUID = -2736769272527126150L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,11 +44,10 @@ public class Todo implements Serializable{
 	@NotNull
 	private String todo;
 	
-	@ManyToOne
-	@JoinColumn
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="user_id")
 	private User user;
 
-	
 	@Column(name = "start_date")
 	@DateTimeFormat(pattern = "MM-dd-yyyy", iso = ISO.DATE_TIME)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy")
@@ -59,12 +59,20 @@ public class Todo implements Serializable{
 	@NotNull
 	private int priority; /* priority 1 - 5*/
 	
+	public Todo() {
+		super();
+	}
+	
+	
+
+
 	@JsonCreator
-	public Todo(@JsonProperty("id") Long id, @NotNull @JsonProperty("todo") String todo, @JsonProperty("dueDate") LocalDate dueDate, @JsonProperty("status") @NotNull Boolean status,
-			@JsonProperty("priority") @NotNull int priority) {
+	public Todo(@JsonProperty("id") Long id, @NotNull @JsonProperty("todo") String todo, @NotNull @JsonProperty("user") User user, @JsonProperty("dueDate") LocalDate dueDate,
+			@JsonProperty("status") @NotNull Boolean status,@JsonProperty("priority") @NotNull int priority) {
 		super();
 		this.id = id;
 		this.todo = todo;
+		this.user = user;
 		this.dueDate = dueDate;
 		this.status = status;
 		this.priority = priority;
@@ -113,6 +121,10 @@ public class Todo implements Serializable{
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
+//	public User getUser() {
+//		return user;
+//	}
 
 	@Override
 	public int hashCode() {

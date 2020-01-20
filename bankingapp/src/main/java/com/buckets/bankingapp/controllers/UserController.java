@@ -1,5 +1,7 @@
 package com.buckets.bankingapp.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,4 +32,8 @@ public class UserController {
 		return userService.getUser(id);
 	}
 	
+	@GetMapping("/users")
+	public List<User> getAllUsers(){
+		return userService.lisAllUsers();
+	}
 }

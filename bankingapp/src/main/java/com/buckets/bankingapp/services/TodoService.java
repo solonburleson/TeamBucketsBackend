@@ -8,8 +8,7 @@ import java.util.Optional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import com.collabera.todoapp.model.Todo;
-
+import com.buckets.bankingapp.model.Todo;
 public class TodoService {
 	
 	@Primary

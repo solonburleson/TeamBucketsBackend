@@ -11,117 +11,54 @@ public class UserService implements UserRespository
 	UserRepository userRepo;
 	
 	//return all users
-	public List<User> lisAllUsers()
+	public List<User> getAllUsers()
 	{
 		return repo.findAll();
 	}
 	
 	//user specific
-	public List<User> listUsers(String user)
+	public User getUser(Long id) 
 	{
-		try
+		Optional<User> found = UserRepo.findById(id);
+		
+		if(found.isPresent()) 
 		{
-			List<User> users = userRepo.getList();
-			return users;
-		} catch(SQLException e) {}
-		return null;
-	}
-	
-	public User getUser(int userId) 
-	{
-		try 
-		{
-			List<User> users = userRepo.getList();
-			for(User user:users) 
-			{
-				if(user.getId()==userId) 
-				{
-					return user;
-				}
-			}
-		} 
-		catch (SQLException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return found.get();
 		}
-		return new User();
+		else 
+		{
+			return new User();
+		}
 	}
 	
 	//add user to list
-	public User createUser(String userName, String password, String fullName, String role)
+	public void addUser(User user) 
 	{
-		try 
+		boolean foundUser = false;
+		repo.findAll().stream().anyMatch(c -> c.getId() == user.getId());
+		if(!foundUser) 
 		{
-			User user = userRepo.insertUser(1,userName, password, fullName, role);
-			return user;
-		} 
-		catch(SQLException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			repo.save(user);
 		}
-		return null;
-	}
-	
-	public User edit2User(User user) 
-	{
-		try 
-		{
-			userRepo.getUser(user.getId());
-			userRepo.editUser(user);
-			return user;
-		}
-		catch (SQLException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	//update a user in the list
-	public User updateUser(User user)
+	public void updateUser(User user) 
 	{
-		try 
+		Optional<User> optToUpdate = userRepo.findById(user.getId());
+		
+		if(optToUpdate.isPresent()) 
 		{
-			List<User> users = userRepo.getList();
-			if(users.contains(user)) 
-			{
-				for(User userTemp:users) 
-				{
-					if(userTemp.getId()==user.getId()) 
-					{
-						userTemp.setUserName(user.getUserName());
-						userTemp.setPassword(user.getPassword());
-						userTemp.setFullName(user.getFullName());
-						userTemp.setRole(user.getRole());
-					}
-				}
-			}
-			return user;
-			
-		} 
-		catch (SQLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			User toUpdate = optToUpdate.get();
+			toUpdate.setFullName(user.getFullName());
+			toUpdate.setPassword(user.getPassword());
+			repo.save(toUpdate);
 		}
-		return null;
 	}
 	
 	//delete user list
-	public User deleteUser(int userId)
+	public void deleteUser(long id) 
 	{
-		try 
-		{
-			userRepo.deleteUser(userId);
-		} 
-		catch (SQLException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		repo.deleteById(id);
 	}
 }

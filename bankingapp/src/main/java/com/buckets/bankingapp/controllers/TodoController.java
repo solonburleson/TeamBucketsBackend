@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +46,7 @@ public class TodoController {
     }
     
     
-    @PutMapping("/todos/{user_id}")
+    @PostMapping("/todos/{user_id}")
     public Todo createTodo(@Valid @RequestBody Todo todo, @PathVariable("user_id") Long user_id) {
     	return todoService.addTodo(todo, user_id);
     }

@@ -1,8 +1,7 @@
 package com.buckets.bankingapp.services;
 
-import java.util.ArrayList;
+
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,20 +25,6 @@ import com.buckets.bankingapp.repositories.TodoRepository;
 			return todoRepository.findAll();
 		}
 		
-		// return user specific todos 
-//		public void getUserTodos(User user){
-//			Optional<User> getTodos = todoRepository.findById(user.getUser_id());
-//		}
-		
-		// return todo by id
-//		public Todo getTodo(Long todoId) {
-//			Optional<Todo> tempTodo = todoRepository.findById(todoId);
-//			
-//			if(tempTodo.isPresent())
-//				return tempTodo.get();
-//			else
-//				return new Todo();
-//		}
 		
 		// add a todo to list
 		public Todo addTodo(Todo todo, Long userId){

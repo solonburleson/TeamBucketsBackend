@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.buckets.bankingapp.models.Todo;
-import com.buckets.bankingapp.models.User;
 import com.buckets.bankingapp.services.TodoService;
 
 
@@ -47,21 +44,8 @@ public class TodoController {
     	return todoService.listAllTodos();
     }
     
-    /***** Get single users todo by user id *****/
-//    @GetMapping("/todos/{id}")
-//    public Todo userTodos(Long id) {
-//    	
-//    	return todoService.getUserTodos(id);
-//    }
     
- 	/***** Create a todo *****/
-//    @RequestMapping(value = "/todos", method = RequestMethod.POST)
-//    public Todo createTodo(@Valid @RequestBody Todo todo, HttpServletRequest request) {
-//    	Long userId = new Long(request.getParameter("user_user_id"));;
-//    	return todoService.addTodo(todo, userId);
-//    }
-    
-    @RequestMapping(value = "/todos/{user_id}", method = RequestMethod.POST)
+    @PutMapping("/todos/{user_id}")
     public Todo createTodo(@Valid @RequestBody Todo todo, @PathVariable("user_id") Long user_id) {
     	return todoService.addTodo(todo, user_id);
     }

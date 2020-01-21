@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.buckets.bankingapp.models.Todo;
 import com.buckets.bankingapp.models.User;
+import com.buckets.bankingapp.services.TodoService;
 import com.buckets.bankingapp.services.UserService;
 
 @RestController
@@ -21,19 +23,28 @@ public class UserController {
 	
 	@Autowired
 	UserService userService;
+	TodoService todoService;
 
 	@PostMapping("/users")
     public User createUser(@Valid @RequestBody User user) {
     	return userService.createUser(user);
     }
 	
-	@GetMapping("/users/{id}")
-	public User getUser(@PathVariable("id") Long id) {
-		return userService.getUser(id);
-	}
-	
 	@GetMapping("/users")
 	public List<User> getAllUsers(){
 		return userService.lisAllUsers();
+	}
+	
+	@GetMapping("/users/{id}")
+	public User getUser(@PathVariable("id") Long id) {
+		
+		return userService.getUser(id);
+	}
+	
+	@PostMapping("/users/{id}")
+	public Todo plusTodo(Todo todo, @PathVariable("id") Long id) {
+		//List<Todo> userTodos = userService.plusTodo(user);
+		
+		return todoService.addTodo(todo, id);
 	}
 }

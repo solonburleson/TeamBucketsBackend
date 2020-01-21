@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,13 +28,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Table(name = "todo")
 @EntityListeners(AuditingEntityListener.class)
 public class Todo implements Serializable{
-
-
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2736769272527126150L;
+	private static final long serialVersionUID = 1;
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,10 +38,12 @@ public class Todo implements Serializable{
 	@NotNull
 	private String todo;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="user_id")
+	@ManyToOne
+	@JoinColumn
+	//@Column(name = "person")
 	private User user;
 
+	
 	@Column(name = "start_date")
 	@DateTimeFormat(pattern = "MM-dd-yyyy", iso = ISO.DATE_TIME)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy")
@@ -59,24 +55,25 @@ public class Todo implements Serializable{
 	@NotNull
 	private int priority; /* priority 1 - 5*/
 	
-	public Todo() {
-		super();
-	}
-	
-	
-
-
 	@JsonCreator
-	public Todo(@JsonProperty("id") Long id, @NotNull @JsonProperty("todo") String todo, @NotNull @JsonProperty("user") User user, @JsonProperty("dueDate") LocalDate dueDate,
-			@JsonProperty("status") @NotNull Boolean status,@JsonProperty("priority") @NotNull int priority) {
+	public Todo(@JsonProperty("id") Long id, @NotNull @JsonProperty("todo") String todo, @JsonProperty("dueDate") LocalDate dueDate, @JsonProperty("status") @NotNull Boolean status,
+			@JsonProperty("priority") @NotNull int priority) {
 		super();
 		this.id = id;
 		this.todo = todo;
-		this.user = user;
 		this.dueDate = dueDate;
 		this.status = status;
 		this.priority = priority;
 	}
+	
+	
+
+	public Todo() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
 
 	public Long getId() {
 		return id;
@@ -117,14 +114,13 @@ public class Todo implements Serializable{
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
-
+	
+	public User getUser(User user) {
+		return user;
+	}
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-//	public User getUser() {
-//		return user;
-//	}
 
 	@Override
 	public int hashCode() {

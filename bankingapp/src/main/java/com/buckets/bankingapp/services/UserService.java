@@ -1,6 +1,6 @@
 package com.buckets.bankingapp.services;
 
-
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import com.buckets.bankingapp.models.Todo;
 import com.buckets.bankingapp.models.User;
+import com.buckets.bankingapp.repositories.TodoRepository;
 import com.buckets.bankingapp.repositories.UserRepository;
 
 @Service
@@ -17,24 +19,27 @@ public class UserService{
 	
 	@Autowired
 	UserRepository userRepo;
+	TodoRepository todoRepo;
 	
 	//return all users
 	public List<User> lisAllUsers()
 	{
 		return userRepo.findAll();
-		
 	}
 	
 	
-	public User getUser(Long userId) 
+	public User getUser(Long user_id) 
 	{
-		Optional<User> tempTodo = userRepo.findById(userId);
+		Optional<User> tempTodo = userRepo.findById(user_id);
 		
 		if(tempTodo.isPresent())
+		{
 			return tempTodo.get();
-		
+		}
 		else
+		{
 			return new User();
+		}
 			
 		
 	}
@@ -45,6 +50,26 @@ public class UserService{
 		return userRepo.save(user);
 		
 	}
+
+
+//	public Todo plusTodo(User user) {
+//		
+//		
+//	}
+
+
+//	public User plusTodo(User user) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+	
+//	public void updateTodo(Todo todo, Long id) {
+//		User user = getUser(id);
+//		if(user.getUser_id() != -1L) {
+//			user.updateTodo(todo);
+//			userRepo.save(user);
+//		}
+//	}
 	
 //	public User edit2User(User user) 
 //	{

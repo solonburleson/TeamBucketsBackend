@@ -44,7 +44,7 @@ public class Todo implements Serializable{
 	private User user;
 
 	
-	@Column(name = "start_date")
+	@Column(name = "due_date")
 	@DateTimeFormat(pattern = "MM-dd-yyyy", iso = ISO.DATE_TIME)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy")
 	private LocalDate dueDate;

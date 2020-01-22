@@ -37,10 +37,15 @@ public class UserController {
 		return userService.lisAllUsers();
 	}
 	
-	@GetMapping("/users/{id}")
-	public User getUser(@PathVariable("id") Long id) {
-		
-		return userService.getUser(id);
+//	@GetMapping("/users/{id}")
+//	public User getUser(@PathVariable("id") Long id) {
+//		
+//		return userService.getUser(id);
+//	}
+	
+	@GetMapping("/users/{name}")
+	public User getUserByName(@PathVariable("name") String name) {
+		return userService.getUserByName(name);
 	}
 	
 	@PostMapping("/users/{id}")

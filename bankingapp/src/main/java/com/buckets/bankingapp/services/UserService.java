@@ -42,6 +42,10 @@ public class UserService{
 		
 	}
 	
+	public User getUserByName(String name) {
+		return userRepo.findByUsername(name);
+	}
+	
 	//add user to list
 	public User createUser(User user)
 	{

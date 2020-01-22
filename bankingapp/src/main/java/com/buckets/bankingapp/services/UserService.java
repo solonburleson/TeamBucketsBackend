@@ -1,64 +1,90 @@
 package com.buckets.bankingapp.services;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import com.buckets.bankingapp.exceptions.ResourceNotFoundException;
+
+import com.buckets.bankingapp.models.User;
+import com.buckets.bankingapp.repositories.UserRepository;
+
 @Service
 @Primary
-public class UserService implements UserRespository
-{
+public class UserService{
+	
 	@Autowired
 	UserRepository userRepo;
 	
 	//return all users
-	public List<User> getAllUsers()
+	public List<User> lisAllUsers()
 	{
-		return repo.findAll();
+		return userRepo.findAll();
 	}
 	
-	//user specific
-	public User getUser(Long id) 
+	
+	public User getUser(Long user_id) 
 	{
-		Optional<User> found = UserRepo.findById(id);
+		Optional<User> tempTodo = userRepo.findById(user_id);
 		
-		if(found.isPresent()) 
+		if(tempTodo.isPresent())
 		{
-			return found.get();
+			return tempTodo.get();
 		}
-		else 
+		else
 		{
 			return new User();
 		}
+			
+		
+	}
+	
+	public User getUserByName(String name) {
+		return userRepo.findByUsername(name);
 	}
 	
 	//add user to list
-	public void addUser(User user) 
+	public User createUser(User user)
 	{
-		boolean foundUser = false;
-		repo.findAll().stream().anyMatch(c -> c.getId() == user.getId());
-		if(!foundUser) 
-		{
-			repo.save(user);
-		}
+		return userRepo.save(user);
+		
 	}
+	
+
 	
 	//update a user in the list
-	public void updateUser(User user) 
-	{
-		Optional<User> optToUpdate = userRepo.findById(user.getId());
+	public User editUser(Long userId, User userDetails){
 		
-		if(optToUpdate.isPresent()) 
-		{
-			User toUpdate = optToUpdate.get();
-			toUpdate.setFullName(user.getFullName());
-			toUpdate.setPassword(user.getPassword());
-			repo.save(toUpdate);
-		}
+		User user = userRepo.findById(userId)
+    			.orElseThrow( ()-> new ResourceNotFoundException("user", "id", userId));
+    	
+    	// update everything except ID.
+    	user.setUsername(userDetails.getUsername());
+		
+    	user.setPassword(userDetails.getPassword());
+    	
+    	User updatedUser = userRepo.save(user);
+    	
+    	return updatedUser;
 	}
-	
-	//delete user list
-	public void deleteUser(long id) 
+
+	/***** Delete a user *****/
+	public User deleteUser(Long userId)
 	{
-		repo.deleteById(id);
+		User user = userRepo.findById(userId)
+    			.orElseThrow( ()-> new ResourceNotFoundException("User", "id", userId));
+    	
+		
+		User deletedUser = user;
+		
+		userRepo.delete(user);
+
+    	
+    	return deletedUser;
 	}
+		
+	
 }

@@ -2,6 +2,7 @@ package com.buckets.bankingapp.services;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,16 @@ import com.buckets.bankingapp.repositories.TodoRepository;
 			return todoRepository.findAll();
 		}
 		
+		public Todo getTodoById(Long id) {
+			Optional<Todo> optTodo = todoRepository.findById(id);
+			
+			if(optTodo.isPresent()) {
+				return optTodo.get();
+			}
+			
+			return null;
+		}
+		
 		
 		// add a todo to list
 		public Todo addTodo(Todo todo, Long userId){
@@ -44,7 +55,7 @@ import com.buckets.bankingapp.repositories.TodoRepository;
 	    	todo.setDueDate(todoDetails.getDueDate());
 	    	todo.setPriority(todoDetails.getPriority());
 	    	todo.setStatus(todoDetails.getStatus());
-	    	todo.setTodo(todoDetails.getTodo());
+	    	todo.setDescription(todoDetails.getDescription());
 	    	
 	    	Todo updatedTodo = todoRepository.save(todo);
 	    	

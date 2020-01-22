@@ -47,6 +47,11 @@ public class TodoController {
     	return todoService.listAllTodos();
     }
     
+    @GetMapping("/todos/{id}")
+    public Todo getAlltodos(@PathVariable("id") Long id){
+    	return todoService.getTodoById(id);
+    }
+    
     
     @PostMapping("/todos/{user_id}")
     public Todo createTodo(@Valid @RequestBody Todo todo, @PathVariable("user_id") Long user_id) {

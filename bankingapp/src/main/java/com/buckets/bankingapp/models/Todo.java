@@ -36,7 +36,8 @@ public class Todo implements Serializable{
 	private Long id;
 
 	@NotNull
-	private String todo;
+	@Column(name = "description")
+	private String description;
 	
 	@ManyToOne
 	@JoinColumn
@@ -45,8 +46,8 @@ public class Todo implements Serializable{
 
 	
 	@Column(name = "due_date")
-	@DateTimeFormat(pattern = "MM-dd-yyyy", iso = ISO.DATE_TIME)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd", iso = ISO.DATE_TIME)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate dueDate;
 	
 	@NotNull
@@ -56,11 +57,11 @@ public class Todo implements Serializable{
 	private int priority; /* priority 1 - 5*/
 	
 	@JsonCreator
-	public Todo(@JsonProperty("id") Long id, @NotNull @JsonProperty("todo") String todo, @JsonProperty("dueDate") LocalDate dueDate, @JsonProperty("status") @NotNull Boolean status,
+	public Todo(@JsonProperty("id") Long id, @NotNull @JsonProperty("description") String description, @JsonProperty("dueDate") LocalDate dueDate, @JsonProperty("status") @NotNull Boolean status,
 			@JsonProperty("priority") @NotNull int priority) {
 		super();
 		this.id = id;
-		this.todo = todo;
+		this.description = description;
 		this.dueDate = dueDate;
 		this.status = status;
 		this.priority = priority;
@@ -83,12 +84,12 @@ public class Todo implements Serializable{
 		this.id = id;
 	}
 
-	public String getTodo() {
-		return todo;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setTodo(String todo) {
-		this.todo = todo;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public LocalDate getDueDate() {
@@ -130,7 +131,7 @@ public class Todo implements Serializable{
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + priority;
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result + ((todo == null) ? 0 : todo.hashCode());
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
@@ -161,10 +162,10 @@ public class Todo implements Serializable{
 				return false;
 		} else if (!status.equals(other.status))
 			return false;
-		if (todo == null) {
-			if (other.todo != null)
+		if (description == null) {
+			if (other.description != null)
 				return false;
-		} else if (!todo.equals(other.todo))
+		} else if (!description.equals(other.description))
 			return false;
 		if (user == null) {
 			if (other.user != null)

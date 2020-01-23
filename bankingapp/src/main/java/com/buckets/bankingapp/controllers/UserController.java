@@ -44,6 +44,7 @@ public class UserController {
 		return userService.lisAllUsers();
 	}
 	
+/*	
 	@GetMapping("/users/{id}")
 	public EntityModel<User> getUser(@PathVariable("id") Long id) {
 		
@@ -54,25 +55,19 @@ public class UserController {
 		
 		EntityModel<User> resource = new EntityModel<User>(user.get());
 	    WebMvcLinkBuilder linkTo = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getAllUsers());
-		resource.add(linkTo.withRel("all-users"));
+		resource.add(linkTo.withRel("all"));
 		return resource;
 	}
+*/	
 	
-	@GetMapping("/users/name/{name}")
-	public User getUserByName(@PathVariable("name") String name) {
-		return userService.getUserByName(name);
-	}
-		
-		/*
-		Optional<Student> student = studentRepository.findById(id);
-		if (!student.isPresent())
-			throw new StudentNotFoundException("id-" + id);
-		EntityModel<Student> resource = new EntityModel<Student>(student.get());
-	    WebMvcLinkBuilder linkTo = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).retrieveAllStudents());
-
-		resource.add(linkTo.withRel("all-students"));
+	@GetMapping("/users/{name}")
+	public EntityModel<User> getUserByName(@PathVariable("name") String name) {
+		Optional<User> user = userService.getUserByName(name);
+		EntityModel<User> resource = new EntityModel<User>(user.get());
+	    WebMvcLinkBuilder linkTo = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).getAllUsers());
+		resource.add(linkTo.withRel("all"));
 		return resource;
-		*/
+	}
 	
 	
 	@PostMapping("/users/{id}")

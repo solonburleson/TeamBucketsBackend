@@ -42,7 +42,7 @@ public class UserService{
 		
 	}
 	
-	public User getUserByName(String name) {
+	public Optional<User> getUserByName(String name) {
 		return userRepo.findByUsername(name);
 	}
 	

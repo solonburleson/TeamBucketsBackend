@@ -41,6 +41,7 @@ import com.buckets.bankingapp.repositories.TodoRepository;
 		public Todo addTodo(Todo todo, Long userId){
 			User user = userService.getUser(userId);
 			todo.setUser(user);
+			todo.setDueDate(todo.getDueDate());
 			return todoRepository.save(todo);
 			
 		}

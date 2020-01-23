@@ -97,7 +97,7 @@ public class Todo implements Serializable{
 	}
 
 	public void setDueDate(LocalDate dueDate) {
-		this.dueDate = dueDate;
+		this.dueDate = dueDate.plusDays(1);
 	}
 
 	public Boolean getStatus() {
